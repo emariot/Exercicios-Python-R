@@ -1,3 +1,3 @@
 # Exercicios-Python
 ---
-My practice in python from basic to advanced
+My python practice from basic to advanced and English
