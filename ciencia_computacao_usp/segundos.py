@@ -14,4 +14,4 @@ leftover_sec = seconds%3600
 minutes = leftover_sec//60
 leftover = leftover_sec%60
 
-print(days,"dias", hours,"horas", minutes, "minutos",leftover,"segundos.")
+print(days,"dias", hours,"horas", minutes, "minutos", "e", leftover,"segundos.")
