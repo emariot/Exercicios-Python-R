@@ -30,3 +30,17 @@ m5 = matrix(0, nrow=7, ncol=3)
 m5[,1] = 1
 m5[,2] = 2
 m5[,3] = 3
+m6 = matrix(1:21, nrow=7, ncol=3)
+m7 = m6 - m5
+m7 =100*m7
+m6[,3] = m6[,2]^m6[,3]
+m6 = cbind(m6,m6[,1])
+m6 = cbind(m6, log(m6[,1]))
+
+plot(m6[,1],m6[,4], lwd=2, type='b', col='tomato', main='Diagrama')
+plot(m6[,1],m6[,5], lwd=2, type='b', col='tomato', main='Diagrama')
+m7 = cbind(m7, log(m7[,3]))
+plot(m7[,1],m7[,4], lwd=2, type='b', col='tomato', main='Diagrama2')
+colnames(m6) = c("x","y","d","f","log")
+
+# frame 1:05
