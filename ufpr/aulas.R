@@ -163,4 +163,69 @@ plot(df_4$year, df_4$growth, type='l')
 
 texto= "A população mundial esta aumentando, porém a taxa de crescimento esta diminuindo"
 
-# Alula 05
+# Aula 05 - Manipulação de dados
+# Importando dados de bancos abertos com pacotes específicos
+# BACEN     : Banco Central do Brasil
+# WDI       : World Developement from world Bank: Painel por país, com 60 anos e 2440 variáveis
+# pwt10     : Penn World Tables v.10.0 - Dados sobre crescimento econômico mundial, por país
+# Ipeadata  : Base de dados sobre economia brasileira IPEA
+
+install.packages("car")
+library(tidyr)
+library(WDI)
+library(car)
+
+# dfWDI = WDIbulk(timeout = 600) ## Carrega todo o banco de dados
+vars = WDIsearch("Individuals with primary education")
+df_educ = WDI(country = "all", indicator = vars, start = 1980, end = 2020)
+
+vars = WDIsearch("GDP per capita, PPP")
+df_PDC = WDI(country = "all", indicator = vars, start = 1980, end = 2020)
+
+# Banco Central do Brasil - Via API
+v1 = read.csv("http://api.bcb.gov.br/dados/serie/bcdata.sgs.28763/dados?formato=csv", sep=";", dec=",")
+v2 = read.csv("http://api.bcb.gov.br/dados/serie/bcdata.sgs.28764/dados?formato=csv", sep=";", dec=",")
+v3 = read.csv("http://api.bcb.gov.br/dados/serie/bcdata.sgs.28770/dados?formato=csv", sep=";", dec=",")
+
+df = cbind(v1,v2,v3)
+df = df[,-c(3,5)]
+
+plot(v1$valor, type="l", col="blue")
+plot(v2$valor, type="l", col="red")
+plot(v3$valor, type="l", col="darkgreen")
+
+# Dados inflação
+ipca12 = read.csv("http://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados?formato=csv", sep=";", dec=",")
+ipca12[,1] = as.Date(ipca12$data, "%d/%m/%Y")
+ipca12_ = ipca12[ipca12$data>=as.Date("1999/12/31"),]
+
+plot(ipca12_$data, ipca12_$valor, type="l", col="blue")
+abline(h=10,lty=2)
+
+# Penn world Table (Macroeconomia do Crescimento Econômico): 183 países, 52 variáveis
+install.packages("pwt10")
+library(pwt10)
+
+#pwt = data('pwt10.0')
+pwt = force(pwt10.0)
+
+scatterplot(hc~year|country, data=pwt, boxplot=FALSE, smooth=FALSE,
+            reg.line=FALSE, legend=FALSE, lwd=2, pch=1)
+
+pwt$gdppc = pwt$rgdpe/pwt$pop
+scatterplot(gdppc~year|country, data=pwt, boxplot=FALSE, smooth=FALSE,
+            regLine=FALSE, legend=FALSE, lwd=2)
+#IPEA Data
+
+install.packages("ipeadatar")
+library(ipeadatar)
+
+countries = available_countries()
+terr = available_territories()
+series = available_series()
+series2 = series[series$status=="Active",]
+meta = metadata(code = "PRECOS12_IPCA12")
+ipca = ipeadata(code = "BM12_IPCAEXP1212", language = "br")
+plot(ipca$value, type="l", color="tomato", lwd=2)
+
+
