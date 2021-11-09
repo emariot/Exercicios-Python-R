@@ -228,4 +228,101 @@ meta = metadata(code = "PRECOS12_IPCA12")
 ipca = ipeadata(code = "BM12_IPCAEXP1212", language = "br")
 plot(ipca$value, type="l", color="tomato", lwd=2)
 
+# Aula 06 - ORGANIZANDO E MANIPULANDO DADOS 
 
+x = sample(1:100, 30)
+y = 3*x + round(rnorm(30,40,60),0)
+z = -2*x + round(rnorm(30,40,60),0)
+n = cbind(x,y,z)
+hist(z)
+
+# Data Frame
+df = as.data.frame(n)
+rm(x,y,z)
+plot(df$x,df$y, pch=16)
+plot(df$x,df$z, pch=16)
+plot(df$y,df$z, pch=16)
+
+# Transformar em Séries temporais
+dt = ts(df,start=1991, end=2020, frequency = 1)
+plot(dt[,1],type='b',pch=16)
+
+#XTS manipula matrizes
+library(xts)
+date = seq(as.Date("1991-01-01"), by='month', length.out=nrow(n))
+date
+dt2 = xts(n,order.by=date)
+
+plot(dt2[,"x"],type='b',pch=16,main='Time Series: x_t')
+
+# Dados categóricos organizados como Fator
+library(dplyr)
+df$Type = sample(c("A","B","C"),30,replace=TRUE)
+df$Type = as.factor(df$Type)
+plot(df$x,df$y, pch=16, col=df$Type)
+
+# Sumários estatísticos
+df = group_by(df,Type)
+summarise(df,n=n(),soma=sum(x),media=mean(x),dp=sd(x), cv=(sd(x)/mean(x)))
+
+
+# PANEL DATA
+# três dimensões:
+# dimensão cross section = type
+# Dimensão tempo = Data
+# Dimensão dados = x,y,z
+
+df$Type = rep(LETTERS[1:3],times=10) 
+summarise(df, n=n())
+
+df = df[order(df$Type),]
+
+df$date = rep(2011:2020,times=3)
+
+install.packages('psych')
+library(plm)
+library(psych)  
+
+
+pdf = pdata.frame(df,index=c('Type','date'))
+
+summary(pdf)
+describe(pdf)
+
+# Reorganizando dataframe
+# formatos Wide e long
+library(reshape2)
+
+rm(list=ls())
+x = sample(1:100, 30)
+y = 3*x + round(rnorm(30,50,30),0)
+z = -2*x + round(rnorm(30,50,30),0)
+df = as.data.frame(cbind(x,y,z))
+df$Type = rep(LETTERS[1:3],times=10) 
+df = df[order(df$Type),]
+date = rep(2011:2020,3)
+df = cbind(date,df)
+df # Além de dataframe este formato é chamado wide (variáveis distribuidas ao longo das colunas)
+
+df2 = t(df) # Transpõe, mas transforma em caracter 
+df2 # Formarto long
+
+df3 = melt(df, id=c("Type", 'date')) # Estrutura de dados em formato longo (variáveis distribuidas ao longo das linhas)
+
+df4 = acast(df3,Type-date-variable) # transforma objetos em formato long em array
+
+df5 = dcast(df3, date-variable,mean,margins=c("date","variable")) # formato long em dataframe
+
+# Reshate wide to long
+df
+dWide = reshape(df,
+                varying = c("x","y","z"),
+                v.names = "valor",
+                timevar = "variavel",
+                times= c("x","y","z"),
+                direction = "long")
+# Reshape long to wide
+dLong = reshape(dWide,
+                timevar = "variavel",
+                idvar = c('id', 'date', 'Type'),
+                direction = "wide")
