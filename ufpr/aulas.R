@@ -326,3 +326,95 @@ dLong = reshape(dWide,
                 timevar = "variavel",
                 idvar = c('id', 'date', 'Type'),
                 direction = "wide")
+
+# Aula - 7 Gráficos
+
+df = mtcars
+plot(df$wt, df$mpg)
+abline(lm(df$mpg~df$wt), col="blue", lwd=2)
+
+cor(df$wt, df$mpg) # Correlação cor(x,y)
+
+# Com ggplot 2
+library(ggplot2)
+ggplot(df, aes(x = wt, y = mpg)) +
+  geom_point()+
+  geom_smooth(method = "lm")
+
+
+df_2 = iris
+df_2$obs = row(df_2)
+
+install.packages("tidyverse")
+library(tidyverse)
+
+plot(df_2$Sepal.Width, df_2$Sepal.Length, pch=16)
+plot(df_2$Sepal.Width, df_2$Sepal.Length, pch=16, col=df_2$Species)
+
+colors = c("red", "orange", "blue")
+
+ggplot(df_2, aes(x=Sepal.Length, y=Sepal.Width, color=Species))+
+  geom_point() + 
+  scale_alpha_manual(values = colors) +
+  theme_bw()
+
+df_2 = group_by(df_2, Species)
+
+stats = summarise(df_2, n=n(),Sepal.Length=mean(Sepal.Length),
+        Sepal.Width = mean(Sepal.Width))
+
+ggplot(df_2, aes(x=Sepal.Length, y=Sepal.Width, color=Species))+
+  geom_point() + 
+  geom_point(data=stats, size=5, pch=15) +
+  scale_alpha_manual(values = colors) 
+
+
+# Gráficos de Linha
+df_3 = pressure
+par(mfrow=c(1,2))
+plot(df_3$temperature, type = "l")
+plot(df_3$pressure, type = "l")
+plot(df_3$temperature, df_3$pressure, type = "l")
+
+# Pontos e linhas
+plot(df_3$temperature, df_3$pressure, type = "l")
+points(df_3$temperature, df_3$pressure)
+points(df_3$temperature, df_3$pressure/2, col='red')
+lines(df_3$temperature, df_3$pressure/2, col='red')
+
+ggplot(df_3, aes(x = temperature, y = pressure))+
+  geom_line()+
+  geom_point()
+
+# Bar plot 
+df_5 = BOD
+df_5$local = letters[3:8]
+
+barplot(df_5$demand, names.arg = df_5$local, col="cyan")
+
+tb = table(df$cyl)
+tb
+
+barplot(tb, col='yellow') # Distribuição de frequência
+
+ggplot(df_5, aes(x=factor(Time), y=demand)) +
+  geom_col()
+
+ggplot(df, aes(x=factor(cyl))) +
+  geom_bar()
+
+# Histogramas
+
+df$models = rownames(df)
+hist(df$mpg, breaks=5, freq = FALSE)
+
+
+ggplot(df, aes(x=mpg)) +
+  geom_histogram(binwidth = 5)
+
+
+# Boxplot
+df_6 = ToothGrowth
+boxplot(len ~ supp, data = df_6)
+boxplot(len ~ supp + dose, data = df_6)
+
