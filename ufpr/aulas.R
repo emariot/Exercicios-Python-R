@@ -418,3 +418,51 @@ df_6 = ToothGrowth
 boxplot(len ~ supp, data = df_6)
 boxplot(len ~ supp + dose, data = df_6)
 
+# Indice de bem estar urbano - municípios
+install.packages("readxl")
+library(readxl)
+install.packages('Rcpp')
+library(Rcpp)
+setwd("Facul/Economia Computacional/scrips/datasets") 
+df = read_excel("Municipios.xlsx")
+
+boxplot(df$IBEU~df$Nom_RM)
+stripchart(df$IBEU~df$Nom_RM, 
+           vertical=TRUE,
+           method="jitter",
+           pch=16,
+           cex=0.8,
+           add=TRUE,
+           col="red")
+par(mar=c(6,4,1,1), cex.axis=0.7)
+my_colors = (2:(length(unique(df$Nom_RM)))+1)
+boxplot(df$IBEU~df$Nom_RM,
+        col = my_colors,
+        outline = FALSE,
+        horizontal = FALSE,
+        las = 2,
+        xlab = "")
+stripchart(df$IBEU~df$Nom_RM, 
+           vertical=TRUE,
+           method="jitter",
+           pch=16,
+           cex=0.8,
+           add=TRUE,
+           col="red")
+
+medians = reorder(df$Nom_RM,df$IBEU,median)
+boxplot(df$IBEU~medians,
+        col = my_colors,
+        outline = FALSE,
+        horizontal = FALSE,
+        las = 2,
+        xlab = "")
+stripchart(df$IBEU~medians, 
+           vertical=TRUE,
+           method="jitter",
+           pch=16,
+           cex=0.8,
+           add=TRUE,
+           col="red")
+
+# Aula 8 
