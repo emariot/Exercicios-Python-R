@@ -465,4 +465,114 @@ stripchart(df$IBEU~medians,
            add=TRUE,
            col="red")
 
-# Aula 8 
+# Aula 8 - Gráficos_2
+
+x = -20:20
+y = x^2
+plot(y, type = 'l', col='blue')
+plot(x, y, type = 'l', col='blue', lwd="")
+
+curve(x^3-5*x, from=-4,to=4,col='red',lwd=2,ylab='')
+par(new=TRUE)
+curve(x^3-3*x, from=-4,to=4,col='blue',lwd=2,ylab='', yaxt='n')
+
+legend(-4,50,legend=c("x^3+5x","x^3+3x"), 
+                      col=c("red","blue"),
+                      lwd=3)
+
+funclog = function(x){
+  1/(1+exp(-x+10))
+}
+
+curve(funclog(x), from = 0, to = 20)
+curve(1-funclog(x), add = TRUE, col='red')
+
+# Elementos gráficos
+x = seq(-4,4,0.1)
+y = x^2
+z = x^4
+
+df = as.data.frame(cbind(x,y,z))
+graphics.off()
+
+plot(x,y,type='l',main='Scatter Plot')
+lines(x,z,type='l', col='blue')
+
+# Alterando limite vertical
+plot(x,z,type='l',main='Scatter Plot')
+lines(x,y,type='l', col='blue')
+
+# Dois eixos y
+par(mar=c(3,4,2,4), mpg=c(1.5,0.5,0),bg="white")
+plot(x,y,type='l',main='Scatter Plot', col='red', 
+     col.axis='red',
+     col.lab='red4')
+axis(1, col='green4', col.axis='green4')
+axis(2, col='red4', col.axis='red4')
+par(new=TRUE)
+plot(x,z,type='l',col='blue', axes=FALSE, bty='n',xlab="",ylab="")
+axis(4, col='blue', col.axis='blue')
+mtext("z", side=4, line=2, las=3,col="blue")
+legend(0,250,legend=c("y","z"), col=c("red","blue"), lwd=2)
+
+library(ggplot2)
+df = as.data.frame(cbind(x,y,z))
+ggplot(df,aes(x=x))+
+  geom_line(aes(y=y), size=0.5, color='blue')+
+  geom_line(aes(y=z), size=0.5, color='red')+
+  scale_y_continuous(limits = c(0,20),sec.axis = sec_axis(~.*10,name='z'))+
+  theme(
+    panel.background = element_rect(fill = "transparent", color = "black"),
+    panel.border = element_blank(),
+    axis.line = element_line(),
+    axis.ticks = element_line(color='black'),
+    axis.title.y = element_text(color='blue', size=13),
+    axis.title.y.left = element_text(color='blue', size=13),
+    axis.line.y.left = element_line(color='blue'),
+    axis.title.y.right = element_text(color='red', size=13),
+    axis.line.y.right = element_line(color='red')
+    )+
+  ggtitle("ggplot - dois eixos")
+
+# Gráficos com áreas polígonos
+graphics.off()
+par(mar=c(3,4,2,4), mpg=c(1.5,0.5,0),bg="white")
+plot(1:10, 1:10, type = 'n', xlab = "x", ylab = "y") # Desenha um plot vazio
+
+polygon(c(2,3,4), c(2,6,2), col='red')
+points(c(2,3,4), c(2,6,2), col='coral4', pch=19)
+text(1.5,1.5, "(2,2)")
+text(3,6.5,"(3,6)")
+text(4.5,1.5,"(4,2)")
+
+polygon(c(7,6,8), c(7,10,10), col="cyan", density=20, angle=45)
+polygon(c(6,6,9,9), c(2,6,6,2), col='tomato')
+
+# Polígono entre curvas
+x = seq(-5,5,0.1)
+y = 2*x^2
+z = x^3-10*x
+plot(x,y,type='l', xlab="x", ylab = "y", col='red', ylim = c(-40,60))
+lines(x,z, type='l', xlab="x", ylab = "y", col='blue', ylim = c(-40,60))
+
+
+plot(x,y,type='l', xlab="x", ylab = "y,z", col='red', ylim = c(-40,60))
+polygon(c(x, rev(x)), c(z, rev(y)), col='grey')
+lines(x,y,type='l', xlab="x",ylab="y,z",col='red', ylim = c(-40,60), lwd=2)
+lines(x,z,type='l',col='blue', lwd=2)
+legend(0,50,legend=c("y=x^2", "z=x^3-10x"), col=c("red","blue"),pch=19,bty="n")
+
+
+x = seq(-5,5,0.1)
+y = cumsum(rnorm(x))
+z = cumsum(rnorm(x))
+plot(x,y,type="l", xlab="x", ylab = "y", col="red")
+lines(x,z, type="l", xlab="x", ylab = "y", col="blue")
+
+plot(x,y,type="l", xlab="x", ylab = "y", col="red")
+polygon(c(x, rev(x)), c(z, rev(y)), col="gray")
+lines(x,y, type="l", xlab="x", ylab = "y", col="blue", ylim=c(-60,40), lwd = 2)
+lines(x,z, type="l", xlab="x", ylab = "y", col="red",lwd = 2)
+
+# Aula 09
+
