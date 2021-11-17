@@ -574,5 +574,64 @@ polygon(c(x, rev(x)), c(z, rev(y)), col="gray")
 lines(x,y, type="l", xlab="x", ylab = "y", col="blue", ylim=c(-60,40), lwd = 2)
 lines(x,z, type="l", xlab="x", ylab = "y", col="red",lwd = 2)
 
-# Aula 09
+# Aula 09 Gráficos_3
+# Gráficos 3D com Scaterplot
+install.packages("scatterplot3d")
+library(scatterplot3d)
+df = iris
+scatterplot3d(df[,1:3])
+scatterplot3d(df[,1:3], angle=60, pch=16, color="steelblue")
 
+shape = c(15, 16, 17)
+shapesv = shape[as.numeric(df$Species)]
+df$shape = shapesv
+scatterplot3d(df[,1:3], pch = shapesv)
+
+# Alterando as cores
+col = c("orange", "red4","deepskyblue4")
+colorv = col[as.numeric(df$Species)]
+scatterplot3d(df[,1:3],pch=shapesv, color=colorv,
+              grid=FALSE, box = TRUE)
+legend("right", legend = levels(df$Species), col=col, pch=shape)
+
+# Pacote rgl
+install.packages("rgl")
+library(rgl)
+
+# plot3d()
+x = rnorm(20)
+y = rnorm(20)
+z = rnorm(20)
+
+plot3d(x,y,z, col="blue")
+
+# persp()
+x = seq(-10, 10, length = 21)
+y = x
+z = 2*x+1*y
+plot3d(x,y,z)
+persp(x,y,z) # Erro porque z não é uma matriz
+
+# plano
+plano = function(x,y){
+  z = 2*x + y
+}
+z = outer(x,y,plano)
+persp(x,y,z, theta=0, phi=0, expand=1, col="cyan")
+
+# parabola
+parab = function(x,y){
+  z = x^2 + y
+}
+z = outer(x,y,parab)
+persp(x,y,z, theta=0, phi=0, expand=1, col="cyan", shade=0.5)
+
+# Cone
+# plano
+cone = function(x,y){
+  z = x^2 + y^2
+}
+z = outer(x,y,cone)
+persp(x,y,z, theta=0, phi=0, expand=1, col="cyan", shade=0.5)
+
+# Frame 52:36
