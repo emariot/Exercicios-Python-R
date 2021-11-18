@@ -634,4 +634,52 @@ cone = function(x,y){
 z = outer(x,y,cone)
 persp(x,y,z, theta=0, phi=0, expand=1, col="cyan", shade=0.5)
 
-# Frame 52:36
+# quações ondulatórias (seno,cosseno)
+f = function(x,y){
+  f = sin(y)
+}
+z = outer(x,y,f)
+persp(x,y,z, theta=45, phi=30, expand=1, col="green", border="black", shade=0.5)
+
+# Criar uma função para gerar cores entre duas cores selecionadas
+func_col = colorRampPalette(c("cyan", "red"))
+col = func_col(41)
+persp(x,y,z, theta=45, phi=30, col=col, border="black", shade=0.5)
+
+
+# SUrface 3D
+surface3d(x,y,z,col="green")
+axes3d(c("x","y","z"),edges="bbox",labels=TRUE)
+
+open3d()
+persp3d(x,y,z, theta=45, phi=30, col=col, border="black", shade=0.5)
+
+# plotly
+install.packages("gapminder")
+library(ggplot2)
+library(plotly)
+library(gapminder)
+
+x = 1:100
+y = 1:100
+m =matrix(x*rnorm(1000,20,40), nrow = 100, ncol = 100)
+
+fig = plot_ly(z=~m)
+fig = fig %>% add_surface
+fig
+
+# Heat Map,
+install.packages("hrbrthemes")
+library(hrbrthemes)
+
+df = as.matrix(mtcars)
+heatmap(df, scale = "column", Colv = NA, Rowv = NA)
+
+# HeatMap com ggplot2
+library(ggplot2)
+x = LETTERS[1:20]
+y = paste0("var", seq(1,20))
+data = expand.grid(X = x, Y = y)
+data$z = runif(400,0,5)
+ggplot(data, aes(X,Y,fill=z))+
+  geom_tile()                     #HeatMap
