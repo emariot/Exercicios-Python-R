@@ -798,3 +798,14 @@ power = function(x,y){return(x^y)}
 soma(2,2)
 prod(2,3)
 power(2,2)
+
+
+create_matrix = function(formula, lin, col){
+  m_temp = matrix(0, nrow = lin, ncol = col)
+  for (i in 1:lin)
+    for (j in 1:col)
+      m_temp[i,j] = eval(parse(text=formula))
+  return(m_temp)
+}
+
+create_matrix("j+i",10,10)
