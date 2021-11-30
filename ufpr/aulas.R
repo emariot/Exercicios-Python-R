@@ -683,3 +683,118 @@ data = expand.grid(X = x, Y = y)
 data$z = runif(400,0,5)
 ggplot(data, aes(X,Y,fill=z))+
   geom_tile()                     #HeatMap
+
+# Aula 10 - Programação
+# https://iqss.github.io/dss-workshops/R/Rintro/base-r-cheat-sheet.pdf
+
+# Condição While
+i = 0
+while (i <= 10){
+  print(paste("atep =",i))
+  i = i+1
+}
+
+
+cond = TRUE
+i = 0
+while(cond){
+  if(i>=10){
+    cond = FALSE
+  }
+  print(paste("Condição=", cond, "step=", i))
+  i = i+1
+}
+
+# Procurando uma letra 
+l = letters
+i = 1
+procurar = "a"
+achou = FALSE
+
+while (!achou){
+  if(l[i]==procurar){
+    achou = TRUE
+    print(paste("A letra", procurar, "esta na posição", i))
+  }
+  i = i+1
+}
+
+## Condição For
+l = letters
+for (i in 1:15){
+  print(paste("Letra", l[i]))
+}
+
+## Loops alinhados
+
+m = matrix(0, nrow = 10, ncol = 10)
+
+for (i in 1:10){
+  for (j in 1:10){
+    m[i,j] = i+j
+  }
+}
+
+# If else
+{
+  age = readline(prompt = "idade: ")
+  if(age < 18){
+    print("Você é jovem")
+  }
+  else{
+    print("Você não é jovem")
+  }
+}
+
+# Programa: Idade
+age_ = FALSE
+while(!age_){
+  age = as.numeric(readline(prompt = "idade: "))
+  if(age < 12){
+    print("Você é criança")
+  }
+  else if(age >= 12 & age < 18){
+    print("Você é jovem")
+  }
+  else if(age >= 18 & age < 100){
+    print("Você é adulto")
+  }
+  else{
+    print("Você não existe")
+    age_ = TRUE
+  }
+}
+
+# Programa: Estude economia
+{
+universidade <- readline(prompt = "Qual a universidade: ")
+curso <- readline(prompt = "Qual o curso: ")
+disciplina <- readline(prompt = "Qual a disciplina: ")
+
+if(universidade == "UFPR"){
+  if(curso == "Economia"){
+    if(disciplina == "Economia Computacional"){
+      print("ok")
+    }
+    else{
+      print("Faça Economia Computacional")
+    }
+  }
+  else{
+    print("Omelhor curso é Economia")
+  }
+}
+else{
+  print("Voce deveria estudar na UFPR")
+}
+}
+
+# Criando Funções
+
+soma = function(x,y){return(x+y)}
+prod = function(x,y){return(x*y)}
+power = function(x,y){return(x^y)}
+
+soma(2,2)
+prod(2,3)
+power(2,2)
