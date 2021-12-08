@@ -811,4 +811,27 @@ create_matrix = function(formula, lin, col){
 create_matrix("j+i",10,10)
 
 # Aula 11 - Programação 2
+#Criando e carregando programas (scripts)
 
+source("biblioteca_funcoes.R")
+soma(3,2)
+
+# Um programa de lançamento de dados
+##frame - 32:13
+
+dados = function(n){
+  face = 1:6 
+  dados = sample(face, size = n, replace = TRUE)
+  return(sum(dados))
+}
+dados(3)
+
+play_dados = function(n){
+  face = 1:6 
+  dados = sample(face, size = n, replace = TRUE)
+  list = list(dados,sum(dados))
+  return(list)
+}
+play_dados(3)
+
+# frame 49:54
