@@ -47,15 +47,63 @@ C = []    # Lista para armazenar os valores de C(t) no tempo
 D = []    # Lista para armazenar a dívida do governo no tempo
 time = 20
 
-# Equações
+# Equações dinâmicas
 
 ## Consumo
 def consumo(v):
-    c_ = C0 + c*(v-T)
+    c_ = C0 + c*(v-T)     # v = Renda no período t-1
     C.append(c_)
-    
-    
-## Renda 
+    ## Renda
+def renda():
+    y_ = C[t] +  I0 + G
+    Y.append(y_)
 ## Dívida do Governo
+def divida():
+    d_ = D[t-1] + T - G
+    D.append(d_)
 
-## Frame 31:36
+'''    
+Dinâmica: calculos iterados no tempo após um aumento permanente dos gastos 
+do governo  G = 220    
+'''
+## Inicia vateores em t=0, com valores iniciais
+# Renda de equilíbrio 
+y_eq = (1/(1-c))*(C0+I0 + G - c*T)
+Y.append(y_eq)
+# Consumo de equilíbrio
+c_eq = C0 + c*(y_eq - T)
+C.append(c_eq)
+D.append(T-G)
+G = 220     # Choque de política fiscal
+
+## Loop temporal (cria uma série temporal para cada variável endógena)
+for t in range(1,time):
+    consumo(Y[t-1])
+    renda()
+    divida()
+    
+list(zip(Y,C,D))   
+
+M = pd.DataFrame(list(zip(Y,C,D)), columns = ['Y', 'C', 'D'])
+M.to_csv("ModISLM-Result.csv")
+
+## Plots
+t = list(range(0, time))
+
+plt.plot(t,Y,label="Y(t)", color='blue')
+plt.plot(t,C,label="C(t)", color='red')
+plt.legend(loc="upper left")
+plt.show();
+
+
+fig, axs = plt.subplots(2,2)
+# Renda
+axs[0,0].plot(Y,label="Y(t)", color='black')
+axs[0,0].set_title("Y(t)")
+# Consumo
+axs[0,1].plot(C,label="C(t)", color='black')
+axs[0,1].set_title("C(t)")
+# Dívida
+axs[1,1].plot(D,label="D(t)", color='black')
+axs[1,1].set_title("D(t)")
+plt.show();
